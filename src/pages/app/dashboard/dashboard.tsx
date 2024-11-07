@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 
 import { ReportExcel } from '../expenses/report-excel'
 import { ReportPDF } from '../expenses/report-pdf'
-import { MonthRevenue } from './month-revenue'
+import { MonthExpenses } from './month-expenses'
 import { PopularExpenseChart } from './popular-expense-chart'
 
 export function Dashboard() {
@@ -39,7 +39,7 @@ export function Dashboard() {
 
       <div className="flex flex-col gap-4">
         <div className="grid grid-cols-4 gap-4">
-          <MonthRevenue />
+          <MonthExpenses />
           <PopularExpenseChart />
         </div>
       </div>

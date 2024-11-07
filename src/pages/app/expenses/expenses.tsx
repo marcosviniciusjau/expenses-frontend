@@ -19,9 +19,9 @@ import { ExpenseTableRow } from './expense-table-row'
 export function Expenses() {
   const [searchParams, setSearchParams] = useSearchParams()
 
-  const orderId = searchParams.get('orderId')
-  const customerName = searchParams.get('customerName')
-  const status = searchParams.get('status')
+  const orderId = searchParams.get('expenseId')
+  const title = searchParams.get('title')
+  const paymentType = searchParams.get('paymentType')
 
   const pageIndex = z.coerce
     .number()
@@ -29,7 +29,7 @@ export function Expenses() {
     .parse(searchParams.get('page') ?? '1')
 
   const { data: result } = useQuery({
-    queryKey: ['expenses', pageIndex, orderId, customerName, status],
+    queryKey: ['expenses', pageIndex, orderId, title, paymentType],
     queryFn: () => getExpenses(),
   })
   function handlePaginate(pageIndex: number) {
@@ -40,23 +40,24 @@ export function Expenses() {
   }
   return (
     <>
-      <Helmet title="orders" />
+      <Helmet title="expenses" />
       <div className="flex flex-col gap-4">
         <h1 className="text-3xl font-bold tracking-tight">Despesas</h1>
         <div className="space-y-2.5">
           <div className="rounded-md border">
             <Table>
               <TableHeader>
-                <ExpenseTableFilters/>
+                <ExpenseTableFilters />
                 <TableRow>
-                  <TableHead className="w-[64px]"></TableHead>
                   <TableHead className="w-[140px]">Identificador</TableHead>
-                  <TableHead className="w-[180px]">Realizado há</TableHead>
+                  <TableHead className="w-[180px]">Realizado em</TableHead>
                   <TableHead className="w-[140px]">Tipo de pagamento</TableHead>
                   <TableHead>Título</TableHead>
-                  <TableHead className="w-[140px]">Total</TableHead>
-                  <TableHead className="w-[164px]"></TableHead>
-                  <TableHead className="w-[132px]"></TableHead>
+                  <TableHead>Descrição</TableHead>
+                  <TableHead className="w-[100px]">Total</TableHead>
+                  <TableHead className="w-[32px]"></TableHead>
+                  <TableHead className="w-[64px]"></TableHead>
+                  <TableHead className="w-[64px]"></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

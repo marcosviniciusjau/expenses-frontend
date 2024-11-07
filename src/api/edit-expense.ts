@@ -2,24 +2,27 @@ import { paymentTypeMap } from '@/components/payment-type'
 import { api } from '@/lib/axios'
 
 export interface ExpensesRequest {
+  id: number
   title: string
   description: string | undefined
   amount: number
   date: Date
   paymentType: keyof typeof paymentTypeMap
 }
-export async function createExpense({
+export async function editExpense({
+  id,
   title,
   description,
   amount,
+  date,
   paymentType,
 }: ExpensesRequest) {
   try {
-    const response = await api.post('/Expenses', {
+    const response = await api.put(`/Expenses/${id}`, {
       title,
       description,
       amount,
-      date: new Date(),
+      date,
       paymentType,
     })
     return response.data

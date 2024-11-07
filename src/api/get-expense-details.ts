@@ -1,13 +1,13 @@
+import { paymentTypeMap } from '@/components/payment-type'
 import { api } from '@/lib/axios'
-
 export interface GetOrdersDetailsParams {
   expenseId: string
 }
 export interface GetOrderDetailsResponse {
   title: string
   expenseId: number
-  createdAt: Date
-  paymentType: 'cash' | 'credit_card' | 'debit_card' | 'eletronic'
+  date: Date
+  paymentType: keyof typeof paymentTypeMap
   amount: number
   description: string
 }

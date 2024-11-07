@@ -14,7 +14,7 @@ export function AppLayout() {
       (error) => {
         if (isAxiosError(error)) {
           const code = error.code
-          if (code === 'UNAUTHORIZED') {
+          if (code === 'ERR_NETWORK') {
             navigate('/sign-in', { replace: true })
           }
         }

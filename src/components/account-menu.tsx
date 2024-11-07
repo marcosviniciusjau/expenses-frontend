@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Building, ChevronDown, LogOut } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { getManagedRestaurant } from '@/api/get-managed-restaurant'
@@ -20,15 +21,26 @@ import {
 import { Skeleton } from './ui/skeleton'
 
 export function AccountMenu() {
+  const [isLoadingProfile, setIsLoadingProfile] = useState(true)
   const navigate = useNavigate()
-  const { data: profile, isLoading: isLoadingProfile } = useQuery({
-    queryKey: ['profile'],
-    queryFn: getProfile,
-  })
+  const [companyName, setCompanyName] = useState()
 
   const { mutateAsync: signOutFn, isPending: isSigningOut } = useMutation({
     mutationFn: signOut,
     onSuccess: () => navigate('/sign-in', { replace: true }),
+  })
+  const [managerName, setManagerName] = useState()
+  const [email, setEmail] = useState()
+  async function getProfileFn() {
+    const response = await getProfile()
+    setCompanyName(response.companyName)
+    setManagerName(response.managerName)
+    setEmail(response.email)
+    setIsLoadingProfile(false)
+  }
+
+  useEffect(() => {
+    getProfileFn()
   })
 
   return (
@@ -39,11 +51,7 @@ export function AccountMenu() {
             variant="outline"
             className="flex select-none items-center gap-2"
           >
-            {isLoadingProfile ? (
-              <Skeleton className="h-4 w-40" />
-            ) : (
-              profile?.companyName
-            )}
+            {isLoadingProfile ? <Skeleton className="h-4 w-40" /> : companyName}
             <ChevronDown className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
@@ -56,9 +64,9 @@ export function AccountMenu() {
               </div>
             ) : (
               <>
-                <span>{profile?.managerName}</span>
+                <span>{managerName}</span>
                 <span className="text-xs font-normal text-muted-foreground">
-                  {profile?.email}
+                  {email}
                 </span>
               </>
             )}

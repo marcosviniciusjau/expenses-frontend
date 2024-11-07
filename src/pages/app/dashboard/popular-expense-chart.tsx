@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { ptBR } from 'date-fns/locale'
 import dayjs from 'dayjs'
 import { BarChart } from 'lucide-react'
 import { useState } from 'react'
@@ -9,11 +10,11 @@ import { getPopularExpenses } from '@/api/get-popular-expenses'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 const COLORS = [
-  colors.sky[500],
-  colors.amber[500],
-  colors.violet[500],
-  colors.emerald[500],
-  colors.rose[500],
+  colors.orange[500],
+  colors.blue[500],
+  colors.red[500],
+  colors.yellow[500],
+  colors.green[500],
 ]
 
 export function PopularExpenseChart() {
@@ -51,7 +52,7 @@ export function PopularExpenseChart() {
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
           <CardTitle className="text-base font-medium">
-            Produtos Populares no mes de {month}
+            Despesas mais caras no mês de {month}
           </CardTitle>
           <BarChart className="h-4 w-4 text-muted-foreground" />
         </div>
@@ -64,8 +65,17 @@ export function PopularExpenseChart() {
             marginTop: '10px',
           }}
         >
-          <button onClick={prevChart}>← Anterior</button>
-          <button onClick={nextChart} disabled={isNextDisabled}>
+          <button
+            className="ml-4 mr-4 text-base font-semibold"
+            onClick={prevChart}
+          >
+            ← Anterior
+          </button>
+          <button
+            className="text-base font-semibold"
+            onClick={nextChart}
+            disabled={isNextDisabled}
+          >
             Próximo →
           </button>
         </div>
@@ -129,7 +139,9 @@ export function PopularExpenseChart() {
               </PieChart>
             </ResponsiveContainer>
           ) : (
-            <p>Nenhum dado disponível para {month}</p>
+            <span className="text-base font-medium">
+              Nenhum dado disponível para {month}
+            </span>
           )}
         </CardContent>
       </div>

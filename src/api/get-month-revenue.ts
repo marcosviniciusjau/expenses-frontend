@@ -1,15 +1,15 @@
-import dayjs from 'dayjs'
-
 import { api } from '@/lib/axios'
 export interface GetMonthRevenueResponse {
   receipt: number
-  diffFromLastMonth: number
 }
-export async function getMonthRevenue() {
-  const month = dayjs(new Date()).format('YYYY/MM')
-
+export async function getMonthRevenue(month: string) {
   const response = await api.get<GetMonthRevenueResponse>(
-    `/Expenses/total-amount?month=${month}`,
+    '/Expenses/total-amount',
+    {
+      headers: {
+        month,
+      },
+    },
   )
   return response.data
 }

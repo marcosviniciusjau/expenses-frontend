@@ -6,10 +6,10 @@ import { toast } from 'sonner'
 import { z } from 'zod'
 
 import {
-  getManagedRestaurant,
-  GetManagedRestaurantResponse,
-} from '@/api/get-managed-restaurant'
-import { getProfile } from '@/api/get-profile'
+  getManagedOwner,
+  GetManagedOwnerResponse,
+} from '@/api/get-managed-owner'
+import { getProfile, GetProfileResponse } from '@/api/get-profile'
 import { updateProfile } from '@/api/update-profile'
 
 import { Button } from './ui/button'
@@ -25,8 +25,8 @@ import { Label } from './ui/label'
 import { Textarea } from './ui/textarea'
 
 const storeProfileSchema = z.object({
-  name: z.string().min(1),
-  description: z.string().nullable(),
+  managerName: z.string().min(1),
+  companyName: z.string(),
 })
 
 type StoreProfileSchema = z.infer<typeof storeProfileSchema>
@@ -43,36 +43,36 @@ export function StoreProfileDialog() {
   } = useForm<StoreProfileSchema>({
     resolver: zodResolver(storeProfileSchema),
     values: {
-      name: profile?.name ?? '',
-      description: profile?.description ?? '',
+      managerName: profile?.managerName ?? '',
+      companyName: profile?.companyName ?? '',
     },
   })
-  function updateRestaurantProfile({ name, description }: StoreProfileSchema) {
+  function updateOwnerProfile({
+    managerName,
+    companyName,
+  }: StoreProfileSchema) {
     const cached = queryClient.getQueryData<GetProfileResponse>([
-      'managed-restaurant',
+      'managed-owner',
     ])
 
     if (cached) {
-      queryClient.setQueryData<GetManagedRestaurantResponse>(
-        ['managed-restaurant'],
-        {
-          ...cached,
-          name,
-          description,
-        },
-      )
+      queryClient.setQueryData<GetProfileResponse>(['managed-owner'], {
+        ...cached,
+        companyName,
+        managerName,
+      })
     }
     return { cached }
   }
   const { mutateAsync: updateProfileFn } = useMutation({
     mutationFn: updateProfile,
-    onMutate: ({ name, description }) => {
-      const { cached } = updateRestaurantProfile({ name, description })
+    onMutate: ({ managerName, companyName }) => {
+      const { cached } = updateOwnerProfile({ managerName, companyName })
       return { previousProfile: cached }
     },
     onError: (_, __, context) => {
       if (context?.previousProfile) {
-        updateRestaurantProfile(context.previousProfile)
+        updateOwnerProfile(context.previousProfile)
       }
     },
   })
@@ -80,7 +80,7 @@ export function StoreProfileDialog() {
     try {
       await updateProfileFn({
         name: data.name,
-        description: data.description,
+        companyName: data.companyName,
       })
 
       toast.success('Perfil atualizado com sucesso')
@@ -91,33 +91,31 @@ export function StoreProfileDialog() {
   return (
     <DialogContent>
       <DialogHeader>
-        <DialogTitle>Perfil da loja</DialogTitle>
-        <DialogDescription>
-          Atualize as informações do seu estabelecimento visíveis ao seu cliente
-        </DialogDescription>
+        <DialogTitle>Seu perfil</DialogTitle>
+        <DialogDescription>Atualize suas informações</DialogDescription>
       </DialogHeader>
       <form onSubmit={handleSubmit(handleUpdateProfile)}>
         <div className="space-y-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label className="text-right" htmlFor="name">
-              Nome
+            <Label className="text-right" htmlFor="managerName">
+              Nome do administrador
             </Label>
             <Input
               type="text"
-              id="name"
+              id="managerName"
               className="col-span-3"
-              {...register('name')}
+              {...register('managerName')}
             />
           </div>
 
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label className="text-right" htmlFor="description">
-              Descrição
+            <Label className="text-right" htmlFor="companyName">
+              Nome da empresa
             </Label>
             <Textarea
               className="col-span-3"
-              id="description"
-              {...register('description')}
+              id="companyName"
+              {...register('companyName')}
             />
           </div>
         </div>
