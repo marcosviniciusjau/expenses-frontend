@@ -1,23 +1,20 @@
 # Front-end of Cash Flow project
 
 # Description:
-This web application is a comprehensive solution for expenses, built with React, Vite, and Radix UI for a smooth and efficient user experience.
+View a complete list of expenses of a C# API: https://github.com/marcosviniciusjau/CashFlow with relevant details. Access detailed information for each expense, ensuring a clear view.
+Insightful metrics displayed using Recharts, a powerful library for creating interactive charts and graphs. Gain valuable insights into most expensive expenses trends.
 
-# Features:
 # Authentication:
 Secure login and registration functionalities for managing user accounts.
 
 # Expense Management:
-View a complete list of expenses with relevant details.
 Access detailed information for each expense, ensuring a clear view.
 
-# Data Visualization: 
-Insightful metrics displayed using Recharts, a powerful library for creating interactive charts and graphs. Gain valuable insights into most expensive expenses trends.
-
 # Technology Stack:
-Frontend: React (cutting-edge JavaScript library)
+Frontend: React (cutting-edge Typescript library)
 Build Tool: Vite (lightning-fast development server)
 UI Component Library: Radix UI (accessible and performant components)
+C# API: API Project in .NET for register expenses and for admins generate reports on PDF and Excel
 
 # Here is a demo video of the web application:
 
